@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เรียงลำดับตัวเลขจากน้อยไปมาก</title>
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .input-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .original-numbers {
+            font-size: 24px;
+            text-align: center;
+            margin: 20px 0;
+            letter-spacing: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #steps-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            display: none;
+        }
+        .step {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-left: 3px solid #4CAF50;
+            background-color: #f9f9f9;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #e91e63;
+        }
+        .sorted-array {
+            font-size: 24px;
+            text-align: center;
+            margin: 20px 0;
+            letter-spacing: 10px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>แบบทดสอบที่ 3</h1>
+    <div class="input-container">
+        <h2>โจทย์: ให้เรียงตัวเลขจากน้อยไปมาก โดยอธิบายเป็นลำดับขั้นตอน</h2>
+        <div class="original-numbers">8 9 1 7 3 0 2 5 4 6</div>
+        <button onclick="sortAndExplain()">เรียงลำดับและอธิบาย</button>
+    </div>
+    
+    <div id="steps-container">
+        <h2>ขั้นตอนการเรียงลำดับ</h2>
+        <div id="steps"></div>
+        <h2>ผลลัพธ์</h2>
+        <div id="result" class="sorted-array"></div>
+    </div>
+
+    <script>
+        function sortAndExplain() {
+            // ชุดข้อมูลตัวเลข
+            const numbers = [8, 9, 1, 7, 3, 0, 2, 5, 4, 6];
+            const stepsContainer = document.getElementById('steps');
+            stepsContainer.innerHTML = '';
+            
+            // แสดงตัวเลขต้นฉบับ
+            addStep("ขั้นที่ 1: ทำการระบุตัวเลขทั้งหมดที่มีในชุดข้อมูล", 
+                   `ตัวเลขที่มี: ${numbers.join(', ')}`);
+            
+            // ทำการเรียงลำดับโดยใช้ Selection Sort และอธิบายทุกขั้นตอน
+            let sortedArray = [...numbers];
+            
+            // ค้นหาตัวเลขที่น้อยที่สุด
+            addStep("ขั้นที่ 2: หาตัวเลขที่น้อยที่สุดในชุดข้อมูลเพื่อจัดเป็นตำแหน่งแรก", 
+                   `ตัวเลขที่น้อยที่สุดคือ ${Math.min(...sortedArray)}`);
+            
+            // แสดงการเรียงลำดับทีละขั้นตอน
+            addStep("ขั้นที่ 3: หาตัวเลขที่น้อยที่สุดถัดไปเรื่อยๆ และเรียงตามลำดับ", "");
+            
+            // ใช้ Selection Sort เพื่อแสดงการเรียงลำดับทีละขั้น
+            let tempArray = [...numbers];
+            let sortingSteps = [];
+            
+            for (let i = 0; i < tempArray.length; i++) {
+                let minIndex = i;
+                
+                for (let j = i + 1; j < tempArray.length; j++) {
+                    if (tempArray[j] < tempArray[minIndex]) {
+                        minIndex = j;
+                    }
+                }
+                
+                if (minIndex !== i) {
+                    // สลับตำแหน่ง
+                    [tempArray[i], tempArray[minIndex]] = [tempArray[minIndex], tempArray[i]];
+                }
+                
+                // บันทึกขั้นตอน
+                sortingSteps.push({
+                    step: i + 1,
+                    value: tempArray[i],
+                    array: [...tempArray]
+                });
+            }
+            
+            // แสดงขั้นตอนการหาตัวเลขน้อยที่สุดถัดไป
+            for (let i = 0; i < sortingSteps.length; i++) {
+                const step = sortingSteps[i];
+                const stepText = `ตัวเลขที่น้อยเป็นอันดับ ${i + 1} คือ ${step.value}`;
+                const arrayText = `ลำดับตัวเลขหลังการเรียง ${i + 1} ตัวแรก: [${highlightArray(step.array, i + 1)}]`;
+                
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step';
+                stepDiv.innerHTML = `${stepText}<br>${arrayText}`;
+                document.getElementById('steps').appendChild(stepDiv);
+            }
+            
+            // แสดงผลลัพธ์สุดท้าย
+            addStep("ขั้นที่ 4: ผลลัพธ์การเรียงลำดับจากน้อยไปมาก", 
+                   `ตัวเลขที่เรียงจากน้อยไปมาก: ${tempArray.join(', ')}`);
+            
+            // แสดงผลลัพธ์ในพื้นที่ผลลัพธ์
+            document.getElementById('result').textContent = tempArray.join(' ');
+            
+            // แสดง container ขั้นตอน
+            document.getElementById('steps-container').style.display = 'block';
+        }
+        
+        function highlightArray(array, highlightCount) {
+            return array.map((num, idx) => 
+                idx < highlightCount ? `<span class="highlight">${num}</span>` : num
+            ).join(', ');
+        }
+        
+        function addStep(title, description) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'step';
+            stepDiv.innerHTML = `<strong>${title}</strong><br>${description}`;
+            document.getElementById('steps').appendChild(stepDiv);
+        }
+    </script>
+</body>
+</html>

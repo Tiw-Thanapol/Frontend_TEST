@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใส่ PIN เพื่อดำเนินการต่อ</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            margin: auto;
+            background-color: rgba(237, 237, 237, 0.758);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: center;
+            position: relative;
+        }
+
+        .top-section {
+            max-width: 400px;
+            height: 300px;
+            background-color: rgba(237, 237, 237, 0.758);
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+        }
+
+        .bottom-section {
+            width: 400px;
+            height: 500px;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 2%;
+            box-shadow: #666;
+        }
+
+
+        .header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .back-button {
+            top: 30px;
+            left: 30px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            align-items: left;
+            position: absolute;
+        }
+
+        .arrow {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-top: 3px solid black;
+            border-right: 3px solid black;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-135deg);
+
+        }
+
+        .logo {
+            flex-grow: 1;
+            text-align: center;
+
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 20%;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0 0 30px 0;
+            text-align: center;
+        }
+
+        .pin-dots {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .pin-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 6px;
+        }
+
+        .pin-dot.filled {
+            background-color: #FF6633;
+        }
+
+        .pin-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .pin-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 50px;
+            cursor: pointer;
+        }
+
+        .keypad {
+            max-width: 400px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            margin-top: 0 auto;
+
+        }
+
+        .key {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #4CAF50;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .key:last-child {
+            grid-column: 3;
+        }
+
+        .delete-key {
+            background-color: transparent;
+            color: #4CAF50;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html">
+            <button class="back-button" id="backButton">
+                <b class="arrow left"></b> </button>
+        </a>
+
+
+        <div class="top-section">
+            <div class="header">
+                <div class="logo">
+                    <img src="https://img5.pic.in.th/file/secure-sv1/logo01661c1b7296024d13.png" alt="logo01"
+                        border="0">
+                </div>
+                <div style="width: 24px;"></div> <!-- Spacer for alignment -->
+            </div>
+
+            <div class="title">ใส่ PIN เพื่อดำเนินการต่อ</div>
+
+            <div class="pin-dots" id="pinDots">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+            </div>
+
+            <input type="tel" class="pin-input" id="pinInput" maxlength="6">
+
+
+            <div class="pin-label">ลืมรหัส PIN ></div>
+        </div>
+        <div class="bottom-section">
+
+
+
+            <div class="keypad">
+                <button class="key" data-key="1">1</button>
+                <button class="key" data-key="2">2</button>
+                <button class="key" data-key="3">3</button>
+                <button class="key" data-key="4">4</button>
+                <button class="key" data-key="5">5</button>
+                <button class="key" data-key="6">6</button>
+                <button class="key" data-key="7">7</button>
+                <button class="key" data-key="8">8</button>
+                <button class="key" data-key="9">9</button>
+                <button class="key empty"></button>
+                <button class="key" data-key="0">0</button>
+                <button class="key delete-key" id="deleteKey">⌫</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const pinInput = document.getElementById('pinInput');
+            const pinDots = document.getElementById('pinDots').children;
+            const keys = document.querySelectorAll('.key[data-key]');
+            const deleteKey = document.getElementById('deleteKey');
+            const backButton = document.getElementById('backButton');
+
+            let currentPin = '';
+            const correctPin = '147369';
+
+            // กดปุ่มตัวเลข
+            keys.forEach(key => {
+                key.addEventListener('click', function () {
+                    const digit = this.getAttribute('data-key');
+
+                    // ถ้ากรอกยังไม่ครบ 6 หลัก
+                    if (currentPin.length < 6) {
+                        currentPin += digit;
+                        updatePinDots();
+
+                        // เมื่อกรอกครบ 6 หลัก
+                        if (currentPin.length === 6) {
+                            setTimeout(validatePin, 300);
+                        }
+                    }
+                });
+            });
+
+            // กดปุ่มลบ
+            deleteKey.addEventListener('click', function () {
+                if (currentPin.length > 0) {
+                    currentPin = currentPin.slice(0, -1);
+                    updatePinDots();
+                }
+            });
+
+            // กดปุ่มย้อนกลับ
+            backButton.addEventListener('click', function () {
+                window.location.href = 'index.html';
+            });
+
+            // อัพเดตจุด PIN
+            function updatePinDots() {
+                for (let i = 0; i < pinDots.length; i++) {
+                    if (i < currentPin.length) {
+                        pinDots[i].classList.add('filled');
+                    } else {
+                        pinDots[i].classList.remove('filled');
+                    }
+                }
+            }
+
+            // ตรวจสอบ PIN
+            function validatePin() {
+                if (currentPin === correctPin) {
+                    // ถ้า PIN ถูกต้อง ให้ไปยังแบบทดสอบที่ 3
+                    alert('PIN ถูกต้อง! กำลังนำไปยังแบบทดสอบที่ 3');
+                    window.location.href = 'test03_0.html';
+                } else {
+                    // ถ้า PIN ไม่ถูกต้อง
+                    alert('PIN ไม่ถูกต้อง! กรุณาลองใหม่');
+                    // รีเซ็ต PIN
+                    currentPin = '';
+                    updatePinDots();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
